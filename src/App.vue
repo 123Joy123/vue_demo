@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <Header title="Task Tracker" />
+    <Header @show-add-task="showAddTaskMethod" :showAddTask="showAddTask" title="Task Tracker" />
+    <div v-show="showAddTask">
+    <AddTask @add-task="addTask" />
+    </div>
     <Tasks @toggle-reminder="toggleReminder" @delete-task="deleteTask" :tasks="tasks" />
   </div>
   
@@ -9,16 +12,19 @@
 <script>
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask'
 
 export default {
   name: 'App',
   components: {
     Header,
     Tasks,
+    AddTask,
   },
   data(){
     return {
       tasks:[],
+      showAddTask:false,
     }
   },
   methods:{
@@ -31,6 +37,12 @@ export default {
       // map可以将数组里每个元素都按它的函数处理一边
       // ...后面跟一个对象，该对象的属性除了逗号后面的会被修改，别的都不变
       this.tasks=this.tasks.map((task)=> task.id===id ? {...task,reminder: !task.reminder} : task);
+    },
+    addTask(task){
+      this.tasks=[...this.tasks,task]
+    },
+    showAddTaskMethod(){
+      this.showAddTask=!this.showAddTask
     }
   },
   created(){
