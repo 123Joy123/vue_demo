@@ -6,13 +6,14 @@
     </div>
     <Tasks @toggle-reminder="toggleReminder" @delete-task="deleteTask" :tasks="tasks" />
   </div>
-  
+  <Footer />
 </template>
 
 <script>
 import Header from './components/Header'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
+import Footer from './components/Footer'
 
 export default {
   name: 'App',
@@ -20,6 +21,7 @@ export default {
     Header,
     Tasks,
     AddTask,
+    Footer,
   },
   data(){
     return {
@@ -43,29 +45,40 @@ export default {
     },
     showAddTaskMethod(){
       this.showAddTask=!this.showAddTask
+    },
+    async fetchTasks(){
+      const res=await fetch('api/tasks')
+      const data=await res.json()
+      return data
+    },
+    async fetchTask(id){
+      const res=await fetch(`api/tasks/${id}`)
+      const data=await res.json()
+      return data
     }
   },
-  created(){
-    this.tasks=[
-      {
-        id:1,
-        text:'Doctors Appointment',
-        day:'March 1st at 2:30pm',
-        reminder:true,
-      },
-      {
-        id:2,
-        text:'Meeting at school',
-        day:'March 3rd at 1:30pm',
-        reminder:true,
-      },
-      {
-        id:3,
-        text:'Food shopping',
-        day:'March 1st at 11:00am',
-        reminder:false,
-      }
-    ]
+  async created(){
+    this.tasks=await this.fetchTasks()
+    // [
+    //   {
+    //     id:1,
+    //     text:'Doctors Appointment',
+    //     day:'March 1st at 2:30pm',
+    //     reminder:true,
+    //   },
+    //   {
+    //     id:2,
+    //     text:'Meeting at school',
+    //     day:'March 3rd at 1:30pm',
+    //     reminder:true,
+    //   },
+    //   {
+    //     id:3,
+    //     text:'Food shopping',
+    //     day:'March 1st at 11:00am',
+    //     reminder:false,
+    //   }
+    // ]
   },
 }
 </script>
