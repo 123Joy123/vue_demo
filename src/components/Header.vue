@@ -1,7 +1,7 @@
 <template>
     <header>
         <h1>{{title}}</h1>
-        <Button @show-add-task="$emit('show-add-task')" :title="showAddTask ? 'Close': 'Add Task'" :color="showAddTask ? 'red': 'green'"/>
+        <Button v-show="homePage" @show-add-task="$emit('show-add-task')" :title="showAddTask ? 'Close': 'Add Task'" :color="showAddTask ? 'red': 'green'"/>
     </header>
 </template>
 
@@ -18,6 +18,16 @@ export default {
         Button,
     },
     emits:['show-add-task'],
+    computed:{
+        homePage(){
+            if(this.$route.path==='/'){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+    }
 }
 </script>
 

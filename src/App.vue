@@ -1,84 +1,32 @@
 <template>
   <div class="container">
     <Header @show-add-task="showAddTaskMethod" :showAddTask="showAddTask" title="Task Tracker" />
-    <div v-show="showAddTask">
-    <AddTask @add-task="addTask" />
-    </div>
-    <Tasks @toggle-reminder="toggleReminder" @delete-task="deleteTask" :tasks="tasks" />
+    
+    <router-view :showAddTask="showAddTask"></router-view>
+    <Footer />
   </div>
-  <Footer />
 </template>
 
 <script>
 import Header from './components/Header'
-import Tasks from './components/Tasks'
-import AddTask from './components/AddTask'
+
 import Footer from './components/Footer'
 
 export default {
   name: 'App',
   components: {
     Header,
-    Tasks,
-    AddTask,
     Footer,
   },
   data(){
     return {
-      tasks:[],
       showAddTask:false,
     }
   },
   methods:{
-    deleteTask(id){
-      // filter滤波器，保留符合当前条件的，比如高通滤波器只有高频率的能通过
-      this.tasks=this.tasks.filter((task)=>task.id !== id);
-      console.log('task',id);
-    },
-    toggleReminder(id){
-      // map可以将数组里每个元素都按它的函数处理一边
-      // ...后面跟一个对象，该对象的属性除了逗号后面的会被修改，别的都不变
-      this.tasks=this.tasks.map((task)=> task.id===id ? {...task,reminder: !task.reminder} : task);
-    },
-    addTask(task){
-      this.tasks=[...this.tasks,task]
-    },
     showAddTaskMethod(){
       this.showAddTask=!this.showAddTask
     },
-    async fetchTasks(){
-      const res=await fetch('api/tasks')
-      const data=await res.json()
-      return data
-    },
-    async fetchTask(id){
-      const res=await fetch(`api/tasks/${id}`)
-      const data=await res.json()
-      return data
-    }
-  },
-  async created(){
-    this.tasks=await this.fetchTasks()
-    // [
-    //   {
-    //     id:1,
-    //     text:'Doctors Appointment',
-    //     day:'March 1st at 2:30pm',
-    //     reminder:true,
-    //   },
-    //   {
-    //     id:2,
-    //     text:'Meeting at school',
-    //     day:'March 3rd at 1:30pm',
-    //     reminder:true,
-    //   },
-    //   {
-    //     id:3,
-    //     text:'Food shopping',
-    //     day:'March 1st at 11:00am',
-    //     reminder:false,
-    //   }
-    // ]
   },
 }
 </script>
