@@ -21,7 +21,7 @@
     {
       "text": "test1",
       "day": "day1",
-      "reminder": false,
+      "reminder": true,
       "id": "k-ucIsh"
     }
   ]
